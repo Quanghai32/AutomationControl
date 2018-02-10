@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +19,21 @@ namespace PrismTest
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Shell : Window
     {
-        public MainWindow()
+        public Shell()
         {
             InitializeComponent();
+            
+
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //e.Handled = true;
+        }
+
     }
+
+    
 }

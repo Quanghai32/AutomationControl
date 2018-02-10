@@ -1,0 +1,174 @@
+﻿<Window x:Class="SettingMachine.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SettingMachine"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="700"
+        Icon="D:\HAI\00. VisualStudio\00. Project\PrismTest\SettingMachine\Resources\setting.ico">
+
+    <Window.DataContext>
+        <local:ViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <TabControl x:Name="tabControl">
+            <TabItem Header="Keyence PLC">
+                <DataGrid Name="KeyenceGrid" ItemsSource="{Binding ListMachine}" AutoGenerateColumns="False" AlternatingRowBackground="LightBlue" AlternationCount="2">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Ip Address" Binding="{Binding IpAddress}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Port" Binding="{Binding Port}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Production model" Binding="{Binding ProductModel}"></DataGridTextColumn>
+                        
+                        <!--Actual-->
+                        <DataGridTemplateColumn Header="Actual">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Actual.DisplayValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding  Actual.ListMemoryTypeName}" SelectedIndex="{Binding Actual.TypeIndex,Mode=TwoWay}"/>
+                                        <TextBox Width="30" Text="{Binding Actual.MemoryAddress,Mode=TwoWay}"/>
+                                        <ComboBox ItemsSource="{Binding  Actual.ListFormatName}" SelectedIndex="{Binding Actual.FormatIndex,Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <!--Target-->
+                        <DataGridTemplateColumn Header="Target">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Target.DisplayValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding  Target.ListMemoryTypeName}" SelectedIndex="{Binding Target.TypeIndex,Mode=TwoWay}"/>
+                                        <TextBox Width="30" Text="{Binding Target.MemoryAddress,Mode=TwoWay}"/>
+                                        <ComboBox ItemsSource="{Binding  Target.ListFormatName}" SelectedIndex="{Binding Target.FormatIndex,Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <!--StopTime-->
+                        <DataGridTemplateColumn Header="StopTime">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding StopTime.DisplayValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding  StopTime.ListMemoryTypeName}" SelectedIndex="{Binding StopTime.TypeIndex,Mode=TwoWay}"/>
+                                        <TextBox Width="30" Text="{Binding StopTime.MemoryAddress,Mode=TwoWay}"/>
+                                        <ComboBox ItemsSource="{Binding  StopTime.ListFormatName}" SelectedIndex="{Binding StopTime.FormatIndex,Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <!--RunningTime-->
+                        <DataGridTemplateColumn Header="RunningTime">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RunningTime.DisplayValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding  RunningTime.ListMemoryTypeName}" SelectedIndex="{Binding RunningTime.TypeIndex,Mode=TwoWay}"/>
+                                        <TextBox Width="30" Text="{Binding RunningTime.MemoryAddress,Mode=TwoWay}"/>
+                                        <ComboBox ItemsSource="{Binding  RunningTime.ListFormatName}" SelectedIndex="{Binding RunningTime.FormatIndex,Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <!--Chokotei-->
+                        <DataGridTemplateColumn Header="Chokotei">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Chokotei.DisplayValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding  Chokotei.ListMemoryTypeName}" SelectedIndex="{Binding Chokotei.TypeIndex,Mode=TwoWay}"/>
+                                        <TextBox Width="30" Text="{Binding Chokotei.MemoryAddress,Mode=TwoWay}"/>
+                                        <ComboBox ItemsSource="{Binding  Chokotei.ListFormatName}" SelectedIndex="{Binding Chokotei.FormatIndex,Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <!--AvailabilityRate-->
+                        <DataGridTemplateColumn Header="AvailabilityRate">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding AvailabilityRate.DisplayValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding  AvailabilityRate.ListMemoryTypeName}" SelectedIndex="{Binding AvailabilityRate.TypeIndex,Mode=TwoWay}"/>
+                                        <TextBox Width="30" Text="{Binding AvailabilityRate.MemoryAddress,Mode=TwoWay}"/>
+                                        <ComboBox ItemsSource="{Binding  AvailabilityRate.ListFormatName}" SelectedIndex="{Binding AvailabilityRate.FormatIndex,Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <!--Performance-->
+                        <DataGridTemplateColumn Header="Performance">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Performance.DisplayValue}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox ItemsSource="{Binding  Performance.ListMemoryTypeName}" SelectedIndex="{Binding Performance.TypeIndex,Mode=TwoWay}"/>
+                                        <TextBox Width="30" Text="{Binding Performance.MemoryAddress,Mode=TwoWay}"/>
+                                        <ComboBox ItemsSource="{Binding  Performance.ListFormatName}" SelectedIndex="{Binding Performance.FormatIndex,Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Omron PLC">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Misubishi PLC">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
+        <DockPanel Grid.Row="1">
+            <Button Width="100" HorizontalAlignment="Right"  DockPanel.Dock="Right" Margin="10" Command="{Binding OKCommand}">OK</Button>
+            <Button Width="100" HorizontalAlignment="Right" DockPanel.Dock="Right" Margin="10"  Click="Button_Apply_Click">Apply</Button>
+        </DockPanel>
+    </Grid>
+</Window>
