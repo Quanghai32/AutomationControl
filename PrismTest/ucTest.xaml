@@ -13,19 +13,20 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <MVVMBase:StringToIntergerConverter x:Key="StringToIntConverter"/>
+            <MVVMBase:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <MVVMBase:BoolToStringConverter x:Key="BoolToStringConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Border BorderBrush="Black" BorderThickness="1"  
-            CornerRadius="10" Height="214" Width="384" Tag="false"
-            
-            Name="mainBorder">
-        <Border.Background>
+            CornerRadius="10" Height="220" Width="425" Tag="false"
+            Name="mainBorder" Background="{Binding MyHost.IsPlcConnected ,Converter={StaticResource BoolToColorConverter}}">
+        <!--<Border.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                 <GradientStop Color="Black" Offset="1"/>
                 <GradientStop Color="#FF8CDC75"/>
             </LinearGradientBrush>
-        </Border.Background>
+        </Border.Background>-->
 
         <Border.OpacityMask>
             <VisualBrush>
@@ -40,6 +41,7 @@
                 </VisualBrush.Visual>
             </VisualBrush>
         </Border.OpacityMask>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="55"/>
@@ -51,7 +53,8 @@
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="55"/>
                 <RowDefinition Height="20"/>
-                <RowDefinition/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="15"/>
 
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" >
@@ -97,29 +100,60 @@
                 <!--Text="{Binding TargetProduction}"-->
 
             </Grid>
+            <!--IsConnect-->
+            <TextBlock Grid.Row="2" Text="{Binding MyHost.IsPlcConnected, Converter={StaticResource BoolToStringConverter}}"></TextBlock>
+
             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="16,0,10,0" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
                 <TextBlock Text="Model: "></TextBlock>
                 <TextBlock Text="{Binding ProductModel}" Name="ModelName"></TextBlock>
             </StackPanel>
-            <StackPanel Grid.Column="3" Grid.Row="1" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
-
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Chokotei: "></TextBlock>
-                    <TextBlock Text="{Binding Chokotei.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Running time: "></TextBlock>
+            <Grid Grid.Column="3" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--Chokotei-->
+                <TextBlock  Grid.Row="0" Grid.Column="0" Text="Chokotei: "></TextBlock>
+                <TextBlock  Grid.Row="0" Grid.Column="1" Text="{Binding Chokotei.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                <!--Running time-->
+                <TextBlock  Grid.Row="1" Grid.Column="0" Text="Running time: "></TextBlock>
+                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock Text="{Binding RunningTime.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Hour-->
+                    <TextBlock Text="{Binding RunningTime.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Min-->
+                    <TextBlock Text="{Binding RunningTime.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Second-->
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Stop time: "></TextBlock>
+                <!--Stop time-->
+                <TextBlock  Grid.Row="2" Grid.Column="0" Text="Stop time: "></TextBlock>
+                <StackPanel  Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock Text="{Binding StopTime.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Hour-->
+                    <TextBlock Text="{Binding StopTime.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Min-->
+                    <TextBlock Text="{Binding StopTime.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Second-->
                 </StackPanel>
-            </StackPanel>
+
+            </Grid>
 
             <!--For charting-->
             <Grid Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="3" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
-                <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <lvc:CartesianChart Series="{Binding ChartCollection}" LegendLocation="Right" Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="2" >
                     <lvc:CartesianChart.AxisY>
                         <lvc:Axis Title="Rate" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
                     </lvc:CartesianChart.AxisY>
@@ -127,9 +161,26 @@
                         <lvc:Axis Title="Date" Labels="{Binding XAxis}"></lvc:Axis>
                     </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
+                <!---->
+                <Grid Grid.Column="1" Grid.RowSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock VerticalAlignment="Bottom" Foreground="White" Grid.Row="0" Text="{Binding Performance}">0</TextBlock>
+                    <TextBlock VerticalAlignment="Top"  Foreground="White" Grid.Row="1" Text="{Binding AvailabilityRate}">1</TextBlock>
+                </Grid>
             </Grid>
-        </Grid>
+            <!--Footer-->
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="4" Orientation="Horizontal">
+                    <StackPanel Width="10"></StackPanel>
+                    <TextBlock Foreground="White" Width="15">Ip:</TextBlock>
+                    <TextBlock Foreground="White" Width="100" Text="{Binding MyHost.IP}"></TextBlock>
+                    <TextBlock Foreground="White" Width="30">Port:</TextBlock>
+                    <TextBlock Foreground="White" Text="{Binding MyHost.port}"></TextBlock>
+                </StackPanel>
 
+            </Grid>
 
     </Border>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVVMBaseLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -11,7 +12,7 @@ using System.Timers;
 
 namespace HostLinkKeyenceBase
 {
-    public class HostlinkKeyence
+    public class HostlinkKeyence   :ViewModelBase
     {
         public HostlinkKeyence()
         {
@@ -81,6 +82,19 @@ namespace HostLinkKeyenceBase
                 m_Name = value;
             }
         }
+
+        private bool isPlcConnected;
+
+        public bool IsPlcConnect
+        {
+            get { return isPlcConnected; }
+            set
+            {
+                isPlcConnected = value;
+                RaisePropertyChanged("IsPlcConnected");
+            }
+        }
+
         #endregion
 
         public void SendRequest(ref general.PLCLink link)
@@ -139,6 +153,7 @@ namespace HostLinkKeyenceBase
             Debug.Print("Command was send!");
             int timeout = Environment.TickCount;
             while (connection.Available == 0 && (timeout + 5000) > Environment.TickCount)
+
             {
 
             }
@@ -166,6 +181,10 @@ namespace HostLinkKeyenceBase
 
         public void SyncCircle(object source, ElapsedEventArgs e)
         {
+            if(connection!=null)
+            {
+                IsPlcConnect = connection.Connected;
+            }
             periodTimer.Enabled = false;
             if (ReferenceEquals(ConnList, null))
             {

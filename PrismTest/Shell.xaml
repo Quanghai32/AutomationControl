@@ -7,7 +7,8 @@
         xmlns:prism="http://www.codeplex.com/prism"
         mc:Ignorable="d"
         Title="Automaction machine control" Height="500" Width="1000"
-        Icon="D:\HAI\00. VisualStudio\00. Project\PrismTest\PrismTest\Resources\favicon.ico">
+        Icon=".\favicon.ico"
+        WindowState="Maximized">
 
     <Window.DataContext>
         <local:MainViewModel/>

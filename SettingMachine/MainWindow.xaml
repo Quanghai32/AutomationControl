@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SettingMachine"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="700"
-        Icon="D:\HAI\00. VisualStudio\00. Project\PrismTest\SettingMachine\Resources\setting.ico">
+        Icon=".\setting.ico">
 
     <Window.DataContext>
         <local:ViewModel/>
@@ -167,8 +167,8 @@
         </TabControl>
 
         <DockPanel Grid.Row="1">
-            <Button Width="100" HorizontalAlignment="Right"  DockPanel.Dock="Right" Margin="10" Command="{Binding OKCommand}">OK</Button>
-            <Button Width="100" HorizontalAlignment="Right" DockPanel.Dock="Right" Margin="10"  Click="Button_Apply_Click">Apply</Button>
+            <Button Width="100" HorizontalAlignment="Right"  DockPanel.Dock="Right" Margin="10" Command="{Binding OKCommand}" Click="Button_Click">OK</Button>
+            <Button Width="100" HorizontalAlignment="Right" DockPanel.Dock="Right" Margin="10"  Command="{Binding ApplyCommand}" Click="Button_Apply_Click">Apply</Button>
         </DockPanel>
     </Grid>
 </Window>

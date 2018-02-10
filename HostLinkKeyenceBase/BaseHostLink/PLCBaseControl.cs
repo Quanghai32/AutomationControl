@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVVMBaseLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HostLinkKeyenceBase
 {
-    public class PLCBaseControl:INotifyPropertyChanged
+    public class PLCBaseControl :ViewModelBase
     {
         public string preValue = "";
         public general.PLCLink link;
@@ -117,12 +118,12 @@ namespace HostLinkKeyenceBase
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void RaisePropertyChanged(string propertyName = "")
-        {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //protected void RaisePropertyChanged(string propertyName = "")
+        //{
+        //    var handler = PropertyChanged;
+        //    if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        //}
 
         public event Action<string> EventUpdateValue;
         public void UpdatePlcValue(string value)

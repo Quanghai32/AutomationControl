@@ -60,15 +60,22 @@ namespace SettingMachine
         private void CommandInit()
         {
             OKCommand = new RelayCommand(() => { OKCommandExecute(); });
+            ApplyCommand = new RelayCommand(() => { ApplyCommandExecute(); });
+        }
+
+        private void ApplyCommandExecute()
+        {
+
         }
 
         private void OKCommandExecute()
         {
-            throw new NotImplementedException();
+
         }
 
         public List<MachineKeyence> ListMachine { get; set; }
 
         public ICommand OKCommand { get; set; }
+        public ICommand ApplyCommand { get; set; }
     }
 }

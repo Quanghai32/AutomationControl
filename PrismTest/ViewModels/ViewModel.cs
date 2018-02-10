@@ -82,7 +82,7 @@ namespace PrismTest
                     Id = m.Id,
                     Name = m.Name,
                     ProductModel = m.ProductModel,
-
+                    MyHost = host,
                     Actual = new PlcMemory() { MemoryType = m.Actual.TypeSymbol, PLCAddress = m.Actual.MemoryAddress, DataFormat = m.Actual.FormatSymbol, PLCLink = host },
                     Target = new PlcMemory() { MemoryType = m.Target.TypeSymbol, PLCAddress = m.Target.MemoryAddress, DataFormat = m.Target.FormatSymbol, PLCLink = host },
                     StopTime = new PlcMemory() { MemoryType = m.StopTime.TypeSymbol, PLCAddress = m.StopTime.MemoryAddress, DataFormat = m.StopTime.FormatSymbol, PLCLink = host },
