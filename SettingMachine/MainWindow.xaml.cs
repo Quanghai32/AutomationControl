@@ -28,32 +28,32 @@ namespace SettingMachine
             InitializeComponent();
             LoadData();
         }
-        public List<MachineKeyence> ListMachine { get; set; }
+        public List<SettingKeyenceMachine> ListMachine { get; set; }
 
         private void LoadData()
         {
-            ListMachine = new List<MachineKeyence>();
-            ListMachine=JsonDB.Instance.Read<List<MachineKeyence>>(@"json.txt");
+            ListMachine = new List<SettingKeyenceMachine>();
+            ListMachine = JsonDB.Instance.Read<List<SettingKeyenceMachine>>(@"./SETUP/Setting.txt");
             KeyenceGrid.ItemsSource = ListMachine;
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            JsonDB.Instance.Write(@"json.txt", KeyenceGrid.ItemsSource);
+            JsonDB.Instance.Write(@"./SETUP/Setting.txt", KeyenceGrid.ItemsSource);
             Environment.Exit(1);
         }
 
         private void Button_Apply_Click(object sender, RoutedEventArgs e)
         {
-            JsonDB.Instance.Write(@"json.txt", KeyenceGrid.ItemsSource);
+            JsonDB.Instance.Write(@"./SETUP/Setting.txt", KeyenceGrid.ItemsSource);
         }
     }
 
-    public class ViewModel  :   ViewModelBase
+    public class ViewModel : ViewModelBase
     {
         public ViewModel()
         {
-            ListMachine = new List<MachineKeyence>();
-            ListMachine = JsonDB.Instance.Read<List<MachineKeyence>>(@"json.txt");
+            ListMachine = new List<SettingKeyenceMachine>();
+            ListMachine = JsonDB.Instance.Read<List<SettingKeyenceMachine>>(@"./SETUP/Setting.txt");
             CommandInit();
         }
 
@@ -73,7 +73,7 @@ namespace SettingMachine
 
         }
 
-        public List<MachineKeyence> ListMachine { get; set; }
+        public List<SettingKeyenceMachine> ListMachine { get; set; }
 
         public ICommand OKCommand { get; set; }
         public ICommand ApplyCommand { get; set; }

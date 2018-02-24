@@ -11,6 +11,7 @@ namespace HostLinkKeyenceBase
         public PlcMemory()
         {
             IsReadOnly = false;
+            MemoryValue = "0";
         }
 
         private bool _IsReadOnly;
@@ -44,6 +45,7 @@ namespace HostLinkKeyenceBase
 
         public void useResult(string result)
         {
+            //result = result.Replace("\0", String.Empty);
             if (result == "") return;
             if (preValue != result)
             {
@@ -53,26 +55,42 @@ namespace HostLinkKeyenceBase
                 }
                 else
                 {
+                    result = result.Replace("\0", String.Empty);
                     string txt = "";
                     switch (DataFormat)
                     {
                         case ".U":
-                            txt = System.Convert.ToString(Convert.ToUInt16(result));
+                            //txt = System.Convert.ToString(Convert.ToUInt16(result));
+                            UInt16 Uoutput;
+                            UInt16.TryParse(result, out Uoutput);
+                            txt = Uoutput.ToString();
                             break;
                         case ".S":
-                            txt = System.Convert.ToString(Convert.ToInt16(result));
+                            //txt = System.Convert.ToString(Convert.ToInt16(result));
+                            UInt16 Soutput;
+                            UInt16.TryParse(result, out Soutput);
+                            txt = Soutput.ToString();
                             break;
                         case ".D":
-                            txt = System.Convert.ToString(Convert.ToUInt32(result));
+                            //txt = System.Convert.ToString(Convert.ToUInt32(result));
+                            UInt32 Doutput;
+                            UInt32.TryParse(result, out Doutput);
+                            txt = Doutput.ToString();
                             break;
                         case ".L":
-                            txt = System.Convert.ToString(Convert.ToInt32(result));
+                            //txt = System.Convert.ToString(Convert.ToInt32(result));
+                            UInt32 Loutput;
+                            UInt32.TryParse(result, out Loutput);
+                            txt = Loutput.ToString();
                             break;
                         case ".H":
                             txt = result;
                             break;
                         default:
-                            txt = System.Convert.ToString(Convert.ToUInt16(result));
+                            //txt = System.Convert.ToString(Convert.ToUInt16(result));
+                            UInt16 Defaultoutput;
+                            UInt16.TryParse(result, out Defaultoutput);
+                            txt = Defaultoutput.ToString();
                             break;
                     }
                     MemoryValue = result.Replace("\0", String.Empty);

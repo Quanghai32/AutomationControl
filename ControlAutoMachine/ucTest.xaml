@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="PrismTest.ucTest"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PrismTest"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+             xmlns:MVVMBase="clr-namespace:MVVMBaseLib;assembly=MVVMBaseLib"
+             mc:Ignorable="d" 
+             >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <MVVMBase:StringToIntergerConverter x:Key="StringToIntConverter"/>
+            <MVVMBase:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <MVVMBase:BoolToStringConverter x:Key="BoolToStringConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border BorderBrush="Black" BorderThickness="1"  
+            CornerRadius="10" Height="220" Width="425" Tag="false"
+            Name="mainBorder" Background="{Binding MyHost.IsPlcConnected ,Converter={StaticResource BoolToColorConverter}}">
+        <!--<Border.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="#FF8CDC75"/>
+            </LinearGradientBrush>
+        </Border.Background>-->
+
+        <Border.OpacityMask>
+            <VisualBrush>
+                <VisualBrush.Visual>
+                    <Border         
+                    Background="Black"
+                    SnapsToDevicePixels="True"
+                    CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+                    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+                    />
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </Border.OpacityMask>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="55"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="15"/>
+
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" >
+                <Border HorizontalAlignment="Center" Height="20" Width="100" Background="AliceBlue" CornerRadius="5">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <!--<TextBlock FontSize="14" Text="{Binding Id}"></TextBlock>-->
+                        <TextBlock FontSize="14" Text="{Binding Name}"></TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <Border CornerRadius="10" Grid.Row="1" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+                <Border.OpacityMask>
+                    <VisualBrush>
+                        <VisualBrush.Visual>
+                            <Border         
+                    Background="Black"
+                    SnapsToDevicePixels="True"
+                    CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+                    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+                    />
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Border.OpacityMask>
+                <Image Source="{Binding ImageSrc}" Stretch="Fill" Margin="5,5,0,0"></Image>
+            </Border>
+            <Grid Grid.Column="1" Grid.Row="1" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="45*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Center">Actual:</TextBlock>
+                <TextBlock Grid.Row="1" HorizontalAlignment="Center" FontSize="30" Text="{Binding Actual.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                <!--Text="{Binding ActualProduction}"-->
+                <TextBlock HorizontalAlignment="Center" FontSize="30" Grid.Column="1" Grid.Row="1" Text="/"/>
+                <TextBlock Grid.Column="2" HorizontalAlignment="Center">Target:</TextBlock>
+                <TextBlock Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="30" Text="{Binding Target.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                <!--Text="{Binding TargetProduction}"-->
+
+            </Grid>
+          
+
+            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="16,0,10,0" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+                <TextBlock Text="Model: "></TextBlock>
+                <TextBlock Text="{Binding ProductModel}" Name="ModelName"></TextBlock>
+            </StackPanel>
+            <Grid Grid.Column="3" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--Chokotei-->
+                <TextBlock  Grid.Row="0" Grid.Column="0" Text="Chokotei: "></TextBlock>
+                <TextBlock  Grid.Row="0" Grid.Column="1" Text="{Binding Chokotei.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                <!--Running time-->
+                <TextBlock  Grid.Row="1" Grid.Column="0" Text="Running time: "></TextBlock>
+                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock Text="{Binding RunningTimeHour.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <TextBlock>:</TextBlock>
+                    <!--Hour-->
+                    <TextBlock Text="{Binding RunningTimeMin.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <TextBlock>:</TextBlock>
+                    <!--Min-->
+                    <TextBlock Text="{Binding RunningTimeSec.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Second-->
+                </StackPanel>
+                <!--Stop time-->
+                <TextBlock  Grid.Row="2" Grid.Column="0" Text="Stop time: "></TextBlock>
+                <StackPanel  Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock Text="{Binding StopTimeHour.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <TextBlock>:</TextBlock>
+                    <!--Hour-->
+                    <TextBlock Text="{Binding StopTimeMin.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <TextBlock>:</TextBlock>
+                    <!--Min-->
+                    <TextBlock Text="{Binding StopTimeSec.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <!--Second-->
+                </StackPanel>
+
+            </Grid>
+
+            <!--For charting-->
+            <Grid Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="3" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <lvc:CartesianChart Series="{Binding PerformanceChart}" LegendLocation="Right" Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="2" >
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Rate" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Date" Labels="{Binding XAxis}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+                <!---->
+                <Grid Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" Width="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock VerticalAlignment="Bottom" Foreground="White" Grid.Row="0" Text="{Binding Performance.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                    <TextBlock VerticalAlignment="Top"  Foreground="White" Grid.Row="1" Text="{Binding AvailabilityRate.MemoryValue,Converter={StaticResource StringToIntConverter}}"></TextBlock>
+                </Grid>
+            </Grid>
+            <!--Footer-->
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="4" Orientation="Horizontal">
+                    <StackPanel Width="10"></StackPanel>
+                    <TextBlock Foreground="White" Width="15">Ip:</TextBlock>
+                    <TextBlock Foreground="White" Width="100" Text="{Binding MyHost.IP}"></TextBlock>
+                    <TextBlock Foreground="White" Width="30">Port:</TextBlock>
+                    <TextBlock Foreground="White" Width="60" Text="{Binding MyHost.port}"></TextBlock>
+                    <TextBlock Foreground="White" Width="95">Disconnect time:</TextBlock>
+                    <TextBlock Foreground="White"  Text="{Binding MyHost.DisconnectTime}"/>
+                    <TextBlock Foreground="White">(s)</TextBlock>
+                </StackPanel>
+
+            </Grid>
+
+    </Border>
+</UserControl>

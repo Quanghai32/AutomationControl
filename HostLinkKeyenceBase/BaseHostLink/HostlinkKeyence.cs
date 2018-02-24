@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +13,36 @@ using System.Timers;
 
 namespace HostLinkKeyenceBase
 {
-    public class HostlinkKeyence   :ViewModelBase
+    public class HostlinkKeyence : ViewModelBase
     {
         public HostlinkKeyence()
         {
             time = 100;
+            DisconnectTimer = new Timer(1000);
+            DisconnectTimer.Elapsed += DisconnectTimer_Elapsed;
+            DisconnectTimerCounter = new Timer(1000);
+            DisconnectTimerCounter.Elapsed += DisconnectTimerCounter_Elapsed;
         }
+
+        private void DisconnectTimerCounter_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            DisconnectTime++;
+            DisconnectTimerCounter.Stop();
+            DisconnectTimerCounter.Start();
+        }
+
+
+        private void DisconnectTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            IsPlcConnected = false;
+            DisconnectTimerCounter.Stop();
+            DisconnectTimerCounter.Start();
+        }
+
         public List<general.PLCLink> ConnList;
         private Timer periodTimer;
+        private Timer DisconnectTimer;
+        private Timer DisconnectTimerCounter;
         private TcpClient connection;
 
         #region Properties
@@ -85,15 +108,33 @@ namespace HostLinkKeyenceBase
 
         private bool isPlcConnected;
 
-        public bool IsPlcConnect
+        public bool IsPlcConnected
         {
             get { return isPlcConnected; }
             set
             {
                 isPlcConnected = value;
                 RaisePropertyChanged("IsPlcConnected");
+                if (value)
+                {
+                    DisconnectTimerCounter.Stop();
+                    DisconnectTime = 0;
+                }
             }
         }
+
+        private int disconnectTime;
+
+        public int DisconnectTime
+        {
+            get { return disconnectTime; }
+            set
+            {
+                disconnectTime = value;
+                RaisePropertyChanged("DisconnectTime");
+            }
+        }
+
 
         #endregion
 
@@ -143,20 +184,28 @@ namespace HostLinkKeyenceBase
         }
         public string ReadCommand(general.PLCLink link)
         {
+            if (!connection.Connected)
+            {
+                return "Disconnect";
+            }
             string str = link.cmd;
             byte[] dataByte = System.Text.Encoding.ASCII.GetBytes(str);
             byte[] dataByte2 = new byte[1] { 0xD };
             NetworkStream stream = connection.GetStream();
             Debug.Print("Start sending command ...");
-            stream.Write(dataByte, 0, dataByte.Length);
-            stream.Write(dataByte2, 0, dataByte2.Length);
+
+            //if (PingToAddress(IP))
+            {
+                stream.Write(dataByte, 0, dataByte.Length);
+                stream.Write(dataByte2, 0, dataByte2.Length);
+            }
+
             Debug.Print("Command was send!");
             int timeout = Environment.TickCount;
             while (connection.Available == 0 && (timeout + 5000) > Environment.TickCount)
-
             {
-
             }
+
             if (connection.Available != 0)
             {
                 Debug.Print("Reading data ...");
@@ -170,6 +219,28 @@ namespace HostLinkKeyenceBase
             return "";
         }
 
+        private bool PingToAddress(string IP)
+        {
+            try
+            {
+                Ping PingSender = new Ping();
+                int TimeOut = 120;
+                string PingData = "aaaa";
+                byte[] Buffer = System.Text.Encoding.ASCII.GetBytes(PingData);
+                PingReply PingReply = PingSender.Send(IP, TimeOut, Buffer);
+
+                if (PingReply.Status == IPStatus.Success)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch { return false; }
+        }
+
         public void AddLink(general.PLCLink link)
         {
             if (ReferenceEquals(ConnList, null))
@@ -181,10 +252,12 @@ namespace HostLinkKeyenceBase
 
         public void SyncCircle(object source, ElapsedEventArgs e)
         {
-            if(connection!=null)
+            if (connection != null)
             {
-                IsPlcConnect = connection.Connected;
+                IsPlcConnected = connection.Connected;
             }
+            DisconnectTimer.Stop();
+            DisconnectTimer.Start();
             periodTimer.Enabled = false;
             if (ReferenceEquals(ConnList, null))
             {
@@ -209,7 +282,7 @@ namespace HostLinkKeyenceBase
         {
             return "";
         }
-    
+
 
     }
 }
