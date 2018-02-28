@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Media;
 using LiveCharts.Defaults;
 using System.IO;
+using System.Windows.Input;
 
 namespace PrismTest
 {
@@ -37,6 +38,8 @@ namespace PrismTest
 
             AvailabilityRate.PropertyChanged += Performance_PropertyChanged;
             Performance.PropertyChanged += Performance_PropertyChanged;
+
+            InitCommand();
         }
 
         private void Performance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -75,10 +78,38 @@ namespace PrismTest
         public string Shift { get; set; } = "AllDay";
         public DateTime Date { get; set; } = DateTime.Today;
 
+
+        #endregion
+
+        #region "Feild"
+        DetailView DetailForm;
+        #endregion
+
+        #region Command
+        public ICommand ClickBorderCommand { get; set; }
+
+        private void InitCommand()
+        {
+            ClickBorderCommand = new RelayCommand(() => ClickBorderCommand_Execute());
+
+        }
+
+        private void ClickBorderCommand_Execute()
+        {
+            if (DetailForm == null)
+            {
+
+                DetailForm = new DetailView();
+                DetailForm.DataContext = this;
+            }
+            DetailForm.Show();
+
+
+        }
         #endregion
 
         #region "Charting"
-        private void SetupChart()
+        public void SetupChart()
         {
             PerformanceValue = new ChartValues<ObservableValue>
             {
@@ -124,7 +155,7 @@ namespace PrismTest
 
             PerformanceChart = new SeriesCollection { performanceLine, availabilityLine };
             XAxis = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-            YFormatter = value =>value+" "+ value.ToString("%");
+            YFormatter = value => value + " " + value.ToString("%");
         }
 
         public SeriesCollection PerformanceChart { get; set; }

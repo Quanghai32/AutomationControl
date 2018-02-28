@@ -18,11 +18,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border BorderBrush="Black" BorderThickness="1"  
+    <Border BorderBrush="Black" BorderThickness="1"
             CornerRadius="10" Height="220" Width="425" Tag="false"
-            Name="mainBorder" Background="{Binding MyHost.IsPlcConnected ,Converter={StaticResource BoolToColorConverter}}">
+            Name="mainBorder" Background="{Binding MyHost.IsPlcConnected ,Converter={StaticResource BoolToColorConverter}}"
+            MouseDown="mainBorder_MouseUp">
         <!--Background="{Binding MyHost.IsPlcConnected ,Converter={StaticResource BoolToColorConverter}}"-->
-        
+
         <!--<Border.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                 <GradientStop Color="Black" Offset="1"/>
@@ -44,6 +45,10 @@
             </VisualBrush>
         </Border.OpacityMask>
 
+        <Border.InputBindings>
+            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ClickBorderCommand}"/>
+        </Border.InputBindings>
+        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="55"/>
@@ -102,7 +107,7 @@
                 <!--Text="{Binding TargetProduction}"-->
 
             </Grid>
-          
+
 
             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="16,0,10,0" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
                 <TextBlock Text="Model: "></TextBlock>
@@ -158,15 +163,15 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
-                <lvc:CartesianChart Series="{Binding PerformanceChart}" LegendLocation="Right" Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="2" >
+                <!--<lvc:CartesianChart Series="{Binding PerformanceChart}" LegendLocation="Right" Grid.Column="0" Grid.ColumnSpan="1" Grid.RowSpan="2" >
                     <lvc:CartesianChart.AxisY>
-                        <lvc:Axis Title="Rate" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                        <lvc:Axis Title="Rate"  LabelFormatter="{Binding YFormatter}"></lvc:Axis>
                     </lvc:CartesianChart.AxisY>
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis Title="Date" Labels="{Binding XAxis}"></lvc:Axis>
                     </lvc:CartesianChart.AxisX>
-                    
-                </lvc:CartesianChart>
+
+                </lvc:CartesianChart>-->
                 <!---->
                 <Grid Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" Width="20">
                     <Grid.RowDefinitions>
@@ -188,8 +193,6 @@
                     <TextBlock Foreground="White"  Text="{Binding MyHost.DisconnectTime}"/>
                     <TextBlock Foreground="White">(s)</TextBlock>
                 </StackPanel>
-
             </Grid>
-
     </Border>
 </UserControl>

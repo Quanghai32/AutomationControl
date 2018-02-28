@@ -23,6 +23,18 @@ namespace PrismTest
         public MachineView()
         {
             InitializeComponent();
+            Binding bd = new Binding();
+        }
+        KeyenceMachineViewModel mc = new KeyenceMachineViewModel();
+
+        private void mainBorder_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount > 1)
+            {
+                DetailView d = new DetailView();
+                d.DataContext = mc;
+                //d.Show();
+            }
         }
     }
 }

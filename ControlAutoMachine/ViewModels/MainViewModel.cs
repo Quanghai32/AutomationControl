@@ -54,6 +54,8 @@ namespace PrismTest
             
         }
 
+       
+
         private void OpenSetting_Execute()
         {
             Process.Start("SettingMachine.exe");

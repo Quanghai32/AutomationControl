@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="Automaction machine control" Height="500" Width="1000"
         Icon=".\favicon.ico"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        Closed="Window_Closed">
 
     <Window.DataContext>
         <local:MainViewModel/>

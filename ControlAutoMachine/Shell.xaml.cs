@@ -33,6 +33,10 @@ namespace PrismTest
             //e.Handled = true;
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 
     
