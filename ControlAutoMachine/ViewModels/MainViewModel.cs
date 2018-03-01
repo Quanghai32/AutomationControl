@@ -51,9 +51,7 @@ namespace PrismTest
 
         private void ClearHistory_Execute()
         {
-            var historys = LiteDbConn.db.GetCollection<History>("History");
-            int count = historys.Delete(x => x.Id > 0);
-            MessageBox.Show(count.ToString());
+            
         }
 
         private void OpenSetting_Execute()
@@ -67,7 +65,7 @@ namespace PrismTest
         #endregion
 
         #region "Property"
-        public ObservableCollection<KeyenceMachineModel> ListMachine
+        public ObservableCollection<KeyenceMachineViewModel> ListMachine
         {
             get;
             set;
@@ -77,32 +75,7 @@ namespace PrismTest
         #region "Method"
         private void SaveHistory()
         {
-            List<History> data = new List<History>();
-            var historys = LiteDbConn.db.GetCollection<History>("History");
-
-            foreach (KeyenceMachineModel m in ListMachine)
-            {
-                History h = new History()
-                {
-                    Name = m.Name,
-                    Date = m.Date,
-                    Shift = m.Shift,
-                    AvailabilityRate = m.AvailabilityRate.MemoryValue,
-                    Performance = m.Performance.MemoryValue,
-                };
-
-                //History existsData = historys.Find(x => x.Name == h.Name && x.Date == m.Date && x.Shift == m.Shift).First();
-                //if (existsData==null)
-                //{
-                //    historys.Insert(h);
-                //}
-                //else
-                //{
-                //    existsData.AvailabilityRate = h.AvailabilityRate;
-                //    existsData.Performance = h.Performance;
-                //    historys.Update(existsData);
-                //}
-            }
+           
         }
 
 
@@ -110,7 +83,7 @@ namespace PrismTest
 
         private void LoadSettingFile()
         {
-            ListMachine = new ObservableCollection<KeyenceMachineModel>();
+            ListMachine = new ObservableCollection<KeyenceMachineViewModel>();
             List<SettingKeyenceMachine> tempList = JsonDB.Instance.Read<List<SettingKeyenceMachine>>(@"./SETUP/Setting.txt");
 
             if (tempList == null)
@@ -125,7 +98,7 @@ namespace PrismTest
                     IP = m.IpAddress,
                     port = m.Port,
                 };
-                ListMachine.Add(new KeyenceMachineModel()
+                ListMachine.Add(new KeyenceMachineViewModel()
                 {
                     Id = m.Id,
                     Name = m.Name,

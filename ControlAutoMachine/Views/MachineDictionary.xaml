@@ -4,7 +4,11 @@
                     xmlns:MachineModel="clr-namespace:MachineModel;assembly=MachineModel"
                     >
 
-    <DataTemplate DataType="{x:Type local:KeyenceMachineModel}">
-        <local:ucTest/>
+    <DataTemplate DataType="{x:Type local:KeyenceMachineViewModel}">
+        <local:MachineView/>
+        <!--<StackPanel>
+            <TextBlock Text="{Binding Name}"/>
+            <TextBlock Text="{Binding Actual.MemoryValue}"/>
+        </StackPanel>-->
     </DataTemplate>
 </ResourceDictionary>

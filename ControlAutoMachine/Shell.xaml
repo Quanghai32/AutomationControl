@@ -27,7 +27,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Menu Grid.Row="0" >
             <MenuItem Header="File">
                 <MenuItem Header="Clear history" Command="{Binding ClearHistoryCommand}"/>
@@ -37,8 +37,7 @@
         </Menu>
 
         <Border Grid.Row="1" CornerRadius="10" BorderBrush="Pink" BorderThickness="5">
-            
-                <ItemsControl Name="listView" BorderThickness="2" BorderBrush="Red" ItemsSource="{Binding ListMachine}"
+            <ListView Name="listView" BorderThickness="2" BorderBrush="Red" ItemsSource="{Binding ListMachine}"
                               ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <!--<ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -50,10 +49,7 @@
                         <WrapPanel IsItemsHost="True"></WrapPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-            </ItemsControl>
-           
-            
+            </ListView>
         </Border>
-        
     </Grid>
 </Window>

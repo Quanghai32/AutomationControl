@@ -18,9 +18,9 @@ using System.IO;
 
 namespace PrismTest
 {
-    public class KeyenceMachineModel : ViewModelBase
+    public class KeyenceMachineViewModel : ViewModelBase
     {
-        public KeyenceMachineModel()
+        public KeyenceMachineViewModel()
         {
             SetupChart();
             Actual = new PlcMemory();
@@ -45,6 +45,7 @@ namespace PrismTest
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
                 UpdateChart();
+                SaveHistory();
             });
         }
 
@@ -72,7 +73,7 @@ namespace PrismTest
         public string ImageSrc { get; set; }
         public List<OldData> OldData { get; set; }
         public string Shift { get; set; } = "AllDay";
-        public string Date { get; set; } = "";
+        public DateTime Date { get; set; } = DateTime.Today;
 
         #endregion
 
@@ -95,33 +96,35 @@ namespace PrismTest
                 new ObservableValue(100)
             };
 
-            var Mapper = Mappers.Xy<ObservableValue>()
-                .X((item, index) => index)
-                .Y(item => item.Value);
+            //var Mapper = Mappers.Xy<ObservableValue>()
+            //    .X((item, index) => index)
+            //    .Y(item => item.Value);
 
             var performanceLine = new LineSeries
             {
+                Title = "Performance",
                 Values = PerformanceValue,
                 StrokeThickness = 4,
                 Fill = Brushes.Transparent,
                 PointGeometrySize = 0,
                 DataLabels = true,
-                Configuration = Mapper,
+                //Configuration = Mapper,
             };
 
             var availabilityLine = new LineSeries
             {
+                Title = "Availibility rate",
                 Values = AvailabilityValue,
                 StrokeThickness = 4,
                 Fill = Brushes.Transparent,
                 PointGeometrySize = 0,
                 DataLabels = true,
-                Configuration = Mapper
+                //Configuration = Mapper
             };
 
             PerformanceChart = new SeriesCollection { performanceLine, availabilityLine };
             XAxis = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-            //YFormatter = value => value.ToString("%");
+            YFormatter = value =>value+" "+ value.ToString("%");
         }
 
         public SeriesCollection PerformanceChart { get; set; }
@@ -140,37 +143,19 @@ namespace PrismTest
 
             double ava = 0;
             Double.TryParse(AvailabilityRate.MemoryValue, out ava);
-            PerformanceValue[PerformanceValue.Count - 1].Value = ava;
+            AvailabilityValue[AvailabilityValue.Count - 1].Value = ava;
         }
         #endregion
 
         #region "Method"
         public void LoadHistory()
         {
-            List<string> arrayString = new List<string>();
-            FileInfo[] fileInfor;
-            DirectoryInfo diDirectoryInfo = new DirectoryInfo(@"./LOG/");
-            fileInfor = diDirectoryInfo.GetFiles(Name + "*");
 
-            for (int i = 1; i < 20; i++)
-            {
-                string day = DateTime.Today.AddDays(-i).ToString("yyyyMMdd");
+        }
 
-
-
-
-
-
-
-                if (File.Exists(@"./LOG/" + day + ".txt"))
-                {
-                    arrayString.Add(day);
-                }
-                if (arrayString.Count >= 5) break;
-            }
-
-
-
+        public void SaveHistory()
+        {
+            LiteDbHandle.Instance.SaveHistory(this);
         }
         #endregion
     }
@@ -179,7 +164,11 @@ namespace PrismTest
 
     public class OldData
     {
-        public string Value { get; set; }
+        public int Id { get; set; }
         public DateTime Date { get; set; }
+        public string Shift { get; set; }
+        public double Performance { get; set; }
+        public double AvailabilityRate { get; set; }
+
     }
 }

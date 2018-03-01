@@ -93,11 +93,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Database\LiteDbConn.cs" />
+    <Compile Include="Database\LiteDbHandle.cs" />
     <Compile Include="Models\History.cs" />
-    <Compile Include="Models\KeyenceMachineModel.cs" />
-    <Compile Include="ucTest.xaml.cs">
-      <DependentUpon>ucTest.xaml</DependentUpon>
+    <Compile Include="ViewModels\KeyenceMachineViewModel.cs" />
+    <Compile Include="Views\MachineView.xaml.cs">
+      <DependentUpon>MachineView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PackPanel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -114,7 +114,7 @@
       <DependentUpon>Shell.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ucTest.xaml">
+    <Page Include="Views\MachineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

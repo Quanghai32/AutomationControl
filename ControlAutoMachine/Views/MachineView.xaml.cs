@@ -18,9 +18,9 @@ namespace PrismTest
     /// <summary>
     /// Interaction logic for ucTest.xaml
     /// </summary>
-    public partial class ucTest : UserControl
+    public partial class MachineView : UserControl
     {
-        public ucTest()
+        public MachineView()
         {
             InitializeComponent();
         }

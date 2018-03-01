@@ -34,7 +34,7 @@ namespace SettingMachine
         {
             ListMachine = new List<SettingKeyenceMachine>();
             ListMachine = JsonDB.Instance.Read<List<SettingKeyenceMachine>>(@"./SETUP/Setting.txt");
-            KeyenceGrid.ItemsSource = ListMachine;
+            //KeyenceGrid.ItemsSource = ListMachine;
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -60,7 +60,7 @@ namespace SettingMachine
         private void CommandInit()
         {
             OKCommand = new RelayCommand(() => { OKCommandExecute(); });
-            ApplyCommand = new RelayCommand(() => { ApplyCommandExecute(); });
+            ApplyCommand = new RelayCommand(() => ApplyCommandExecute());
         }
 
         private void ApplyCommandExecute()

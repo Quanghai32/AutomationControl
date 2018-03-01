@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
 
 namespace HostLinkKeyenceBase
 {
@@ -17,8 +18,8 @@ namespace HostLinkKeyenceBase
     {
         public HostlinkKeyence()
         {
-            time = 100;
-            DisconnectTimer = new Timer(1000);
+            time = 1000;
+            DisconnectTimer = new Timer(3000);
             DisconnectTimer.Elapsed += DisconnectTimer_Elapsed;
             DisconnectTimerCounter = new Timer(1000);
             DisconnectTimerCounter.Elapsed += DisconnectTimerCounter_Elapsed;
@@ -194,7 +195,7 @@ namespace HostLinkKeyenceBase
             NetworkStream stream = connection.GetStream();
             Debug.Print("Start sending command ...");
 
-            //if (PingToAddress(IP))
+            if (PingToAddress(IP))
             {
                 stream.Write(dataByte, 0, dataByte.Length);
                 stream.Write(dataByte2, 0, dataByte2.Length);
@@ -221,24 +222,18 @@ namespace HostLinkKeyenceBase
 
         private bool PingToAddress(string IP)
         {
+            bool pingable = false;
+            Ping pinger = new Ping();
             try
             {
-                Ping PingSender = new Ping();
-                int TimeOut = 120;
-                string PingData = "aaaa";
-                byte[] Buffer = System.Text.Encoding.ASCII.GetBytes(PingData);
-                PingReply PingReply = PingSender.Send(IP, TimeOut, Buffer);
-
-                if (PingReply.Status == IPStatus.Success)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                PingReply reply = pinger.Send(IP);
+                pingable = reply.Status == IPStatus.Success;
             }
-            catch { return false; }
+            catch (PingException)
+            {
+                // Discard PingExceptions and return false;
+            }
+            return pingable;
         }
 
         public void AddLink(general.PLCLink link)
