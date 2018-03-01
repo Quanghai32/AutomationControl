@@ -2,7 +2,6 @@
 using LiteDB;
 using MachineModel;
 using MVVMBaseLib;
-using PrismTest.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

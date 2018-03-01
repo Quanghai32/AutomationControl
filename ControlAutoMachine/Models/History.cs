@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrismTest.Models
+namespace PrismTest
 {
     public class History
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Shift { get; set; }
-        public string AvailabilityRate { get; set; }
-        public string Performance { get; set; }
+        public string Model { get; set; }
         public string Date { get; set; }
+
+        public string Shift { get; set; }
+        public double AvailabilityRate { get; set; }
+        public double Performance { get; set; }
     }
 
 }

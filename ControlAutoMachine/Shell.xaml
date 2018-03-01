@@ -37,20 +37,23 @@
             <MenuItem Header="Setting" Command="{Binding OpenSettingCommand}"></MenuItem>
         </Menu>
 
-        <Border Grid.Row="1" CornerRadius="10" BorderBrush="Pink" BorderThickness="5">
-            <ListView Name="listView" BorderThickness="2" BorderBrush="Red" ItemsSource="{Binding ListMachine}"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible">
-                <!--<ItemsControl.ItemsPanel>
+        <Border Grid.Row="1">
+            <ScrollViewer>
+
+                <ItemsControl Name="listView" BorderThickness="2" ItemsSource="{Binding ListMachine}">
+                    <!--<ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <local:PackPanel Margin="5"/>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>-->
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True"></WrapPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ListView>
+                    </ItemsControl.ItemsPanel>-->
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True"></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
         </Border>
     </Grid>
 </Window>

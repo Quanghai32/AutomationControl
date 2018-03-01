@@ -32,7 +32,7 @@ namespace PrismTest
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ((KeyenceMachineViewModel)this.DataContext).SetupChart();
+            ((KeyenceMachineViewModel)this.DataContext).IsShowingDetail = false;
             this.Hide();
             e.Cancel = true;
         }

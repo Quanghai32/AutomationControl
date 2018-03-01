@@ -47,14 +47,18 @@ namespace PrismTest
             if (Application.Current == null) return;
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
-                UpdateChart();
                 SaveHistory();
+                //if(IsShowingDetail)
+                {
+                    //UpdateChart();
+                }
             });
         }
 
         #region "Property"
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool IsShowingDetail { get; set; }
         //public string IpAddress { get; set; }
         //public int Port { get; set; }
         public HostlinkKeyence MyHost { get; set; }
@@ -74,58 +78,59 @@ namespace PrismTest
         public PlcMemory AvailabilityRate { get; set; }
         public PlcMemory Performance { get; set; }
         public string ImageSrc { get; set; }
-        public List<OldData> OldData { get; set; }
-        public string Shift { get; set; } = "AllDay";
-        public DateTime Date { get; set; } = DateTime.Today;
+        public List<History> OldData { get; set; }
+        public string Shift { get; set; }
+        public string ShiftToViewHistory { get; set; }
+        public DateTime Date { get; set; }
+        public DateTime FromDate { get; set; } = DateTime.Today.AddDays(-5);
+        public DateTime ToDate { get; set; } = DateTime.Today;
+
 
 
         #endregion
 
         #region "Feild"
         DetailView DetailForm;
+        TimeSpan StartAShift = new TimeSpan(8, 5, 0);
+        TimeSpan StopAShift = new TimeSpan(20, 5, 0);
+        TimeSpan StartBShift = new TimeSpan(20, 5, 0);
+        TimeSpan StopBShift = new TimeSpan(8, 5, 0);
         #endregion
 
         #region Command
         public ICommand ClickBorderCommand { get; set; }
+        public ICommand GetHistoryCommand { get; set; }
 
         private void InitCommand()
         {
             ClickBorderCommand = new RelayCommand(() => ClickBorderCommand_Execute());
-
+            GetHistoryCommand = new RelayCommand(() => GetHistoryCommand_Execute());
         }
 
         private void ClickBorderCommand_Execute()
         {
             if (DetailForm == null)
             {
-
                 DetailForm = new DetailView();
                 DetailForm.DataContext = this;
             }
             DetailForm.Show();
+            IsShowingDetail = true;
+        }
 
-
+        private void GetHistoryCommand_Execute()
+        {
+            LiteDbHandle.Instance.LoadHistory(FromDate, ToDate, ShiftToViewHistory, ref performanceValue, ref availabilityValue, ref xAxis);
         }
         #endregion
 
         #region "Charting"
         public void SetupChart()
         {
-            PerformanceValue = new ChartValues<ObservableValue>
-            {
-                new ObservableValue(100),
-                new ObservableValue(100),
-                new ObservableValue(100),
-                new ObservableValue(100)
-            };
+            PerformanceValue = new ChartValues<ObservableValue>();
 
-            AvailabilityValue = new ChartValues<ObservableValue>
-            {
-                new ObservableValue(100),
-                new ObservableValue(100),
-                new ObservableValue(100),
-                new ObservableValue(100)
-            };
+            AvailabilityValue = new ChartValues<ObservableValue>();
+
 
             //var Mapper = Mappers.Xy<ObservableValue>()
             //    .X((item, index) => index)
@@ -153,21 +158,60 @@ namespace PrismTest
                 //Configuration = Mapper
             };
 
-            PerformanceChart = new SeriesCollection { performanceLine, availabilityLine };
-            XAxis = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+            //PerformanceChart = new SeriesCollection { performanceLine, availabilityLine };
+            DetailChart = new SeriesCollection { performanceLine, availabilityLine };
+
+            XAxis = new List<string>();
             YFormatter = value => value + " " + value.ToString("%");
         }
 
         public SeriesCollection PerformanceChart { get; set; }
+        public SeriesCollection DetailChart { get; set; }
 
-        public ChartValues<ObservableValue> PerformanceValue { get; set; }
-        public ChartValues<ObservableValue> AvailabilityValue { get; set; }
-        public string[] XAxis { get; set; }
+        private ChartValues<ObservableValue> performanceValue;
+        public ChartValues<ObservableValue> PerformanceValue
+        {
+            get
+            {
+                return performanceValue;
+            }
+            set
+            {
+                performanceValue = value;
+            }
+        }
+
+        private ChartValues<ObservableValue> availabilityValue;
+        public ChartValues<ObservableValue> AvailabilityValue
+        {
+            get
+            {
+                return availabilityValue;
+            }
+            set
+            {
+                availabilityValue = value;
+            }
+        }
+
+        private List<string> xAxis;
+        public List<string> XAxis
+        {
+            get
+            {
+                return xAxis;
+            }
+            set
+            {
+                xAxis = value;
+            }
+        }
 
         public Func<double, string> YFormatter { get; set; }
 
         private void UpdateChart()
         {
+            if (PerformanceValue.Count == 0 || AvailabilityValue.Count == 0) return;
             double per = 0;
             Double.TryParse(Performance.MemoryValue, out per);
             PerformanceValue[PerformanceValue.Count - 1].Value = per;
@@ -186,20 +230,47 @@ namespace PrismTest
 
         public void SaveHistory()
         {
+            CheckDateAndShift();
             LiteDbHandle.Instance.SaveHistory(this);
+        }
+
+        private void CheckDateAndShift()
+        {
+            DateTime checkTime = DateTime.Now;
+            TimeSpan BeforeZeroHour = new TimeSpan(23, 59, 59);
+            TimeSpan ZeroHour = new TimeSpan(0, 0, 0);
+
+            if (checkTime.TimeOfDay >= StartAShift && checkTime.TimeOfDay <= StopAShift)
+            {
+                Shift = "A";
+                Date = DateTime.Now;
+                return;
+            }
+            else if (checkTime.TimeOfDay >= StartBShift && checkTime.TimeOfDay <= BeforeZeroHour)
+            {
+                Shift = "B";
+                Date = DateTime.Now;
+                return;
+            }
+            else if (checkTime.TimeOfDay >= ZeroHour && checkTime.TimeOfDay <= StopBShift)
+            {
+                Shift = "B";
+                Date = checkTime.AddDays(-1);
+                return;
+            }
         }
         #endregion
     }
 
 
 
-    public class OldData
-    {
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public string Shift { get; set; }
-        public double Performance { get; set; }
-        public double AvailabilityRate { get; set; }
-
-    }
+    //public class OldData
+    //{
+    //    public int Id { get; set; }
+    //    public string Name { get; set; }
+    //    public string Date { get; set; }
+    //    public string Shift { get; set; }
+    //    public double Performance { get; set; }
+    //    public double AvailabilityRate { get; set; }
+    //}
 }

@@ -1,6 +1,9 @@
 ﻿using LiteDB;
+using LiveCharts;
+using LiveCharts.Defaults;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,9 +29,12 @@ namespace PrismTest
         {
             using (LiteDatabase db = new LiteDatabase(DbPath))
             {
-                var historys = db.GetCollection<OldData>("History");
+                var historys = db.GetCollection<History>("History");
 
-                List<OldData> oldData = historys.Find(x => x.Date == mc.Date && x.Shift == mc.Shift).ToList();
+                List<History> oldData = historys.Find(x => x.Date == mc.Date.ToString("yyyy-MMM-dd") &&
+                                                      x.Shift == mc.Shift && x.Name == mc.Name  && 
+                                                      x.Model==mc.ProductModel
+                                                      ).ToList();
                 if (oldData.Count != 0)
                 {
                     oldData[0].Performance = Double.Parse(mc.Performance.MemoryValue);
@@ -37,9 +43,11 @@ namespace PrismTest
                 }
                 else
                 {
-                    OldData newData = new OldData()
+                    History newData = new History()
                     {
-                        Date = mc.Date,
+                        Name = mc.Name,
+                        Model=mc.ProductModel,
+                        Date = mc.Date.ToString("yyyy-MMM-dd"),
                         Shift = mc.Shift,
                         AvailabilityRate = Double.Parse(mc.AvailabilityRate.MemoryValue),
                         Performance = Double.Parse(mc.Performance.MemoryValue)
@@ -47,6 +55,42 @@ namespace PrismTest
                     historys.Insert(newData);
                 }
             }
+        }
+
+        public void LoadHistory
+            (
+            DateTime fromDate, DateTime toDate, string shift,
+            ref ChartValues<ObservableValue> perValue,
+            ref ChartValues<ObservableValue> avaiValue,
+            ref List<string> xAxis
+            )
+        {
+            perValue.Clear();
+            avaiValue.Clear();
+            xAxis.Clear();
+
+            using (LiteDatabase db = new LiteDatabase(DbPath))
+            {
+                var historys = db.GetCollection<History>("History");
+                //List<History> oldData = historys.FindAll().ToList();
+                List<History> oldData = historys.Find(x => DateTime.ParseExact(x.Date,"yyyy-MMM-dd",CultureInfo.InvariantCulture) >= fromDate && DateTime.ParseExact(x.Date, "yyyy-MMM-dd", CultureInfo.InvariantCulture) <= toDate && x.Shift == shift).ToList();
+                if (oldData.Count > 0)
+                {
+                    foreach (History o in oldData)
+                    {
+                        perValue.Add(new ObservableValue(o.Performance));
+                        avaiValue.Add(new ObservableValue(o.AvailabilityRate));
+                        xAxis.Add(o.Date);
+                    }
+                }
+            }
+            //using (LiteDatabase db = new LiteDatabase(DbPath))
+            //{
+            //    var historys = db.GetCollection<History>("History");
+
+            //    List<History> oldData = historys.FindAll().ToList();
+            //    oldData=null;
+            //}
         }
 
     }
